@@ -1,0 +1,19 @@
+﻿{
+  "name": "skillserve-volunteer-matcher",
+  "version": "1.0.0",
+  "description": "INST377 final project: SkillServe volunteer matching app",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -e '*' index.js",
+    "dev": "nodemon -e '*' index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.104.1",
+    "body-parser": "^2.2.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
