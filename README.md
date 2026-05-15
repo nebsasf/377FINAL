@@ -1,10 +1,12 @@
-﻿SkillServe
+VERCEL LINK https://project-377final-gt75t8gv2-nebiou-s-projects.vercel.app/
 
-SkillServe is  basicly volunteer matching web application that helps users find local volunteer opportunities based on skills, interests, category, and location.
+ SkillServe
+
+SkillServe is  basically a volunteer-matching web application that helps users find local volunteer opportunities based on skills, interests, category, and location.
 
 Description
 
-Users can browse volunteer opportunities, filter them by category, view opportunity locations on a map, see a chart of opportunity categories, check current weather for each location, and submit a volunteer profile.
+Users can browse volunteer opportunities, filter them by category, view opportunity locations on a map, see a chart of opportunity categories, check current weather for each location, and submit a volunteer profile That can be seen in the supabase table.
 
 Target Browsers
 
