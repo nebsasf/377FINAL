@@ -5,10 +5,10 @@ const { isValidStateAbbreviation } = require('usa-state-validator');
 const dotenv = require('dotenv');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 dotenv.config();
 
-// This tells the server to look for your CSS and JS in the 'public' folder 
+// Serves all files (CSS/JS) from your 'public' folder
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
@@ -16,48 +16,42 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
 
-// Home route: serves your index.html from the public folder [cite: 41, 42]
+// 1. Home route - serves your index.html
 app.get('/', (req, res) => {
   res.sendFile('public/index.html', { root: __dirname });
 });
 
-// API route to get data from Supabase [cite: 48, 50]
+// 2. API route to GET data from your 'opportunities' table
 app.get('/customers', async (req, res) => {
-  console.log('Attempting to get all customers!');
+  console.log('Fetching opportunities from Supabase...');
 
-  const { data, error } = await supabase.from('customer').select();
+  const { data, error } = await supabase
+    .from('opportunities')
+    .select();
 
   if (error) {
-    console.log(`Error: ${error}`);
-    res.statusCode = 500;
-    res.send(error);
+    console.log(`Error: ${error.message}`);
+    res.status(500).send(error);
   } else {
-    console.log('Received Data:', data.length);
+    console.log('Success! Data retrieved:', data.length);
     res.json(data);
   }
 });
 
-// API route to add data to Supabase [cite: 51]
+// 3. API route to WRITE data to your 'opportunities' table
 app.post('/customer', async (req, res) => {
-  console.log('Adding Customer');
-  console.log(`Request: ${JSON.stringify(req.body)}`);
+  const { firstName, lastName, state } = req.body;
 
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const state = req.body.state;
-
-  // Uses the validator library from the template 
+  // Validation check using the library
   if (!isValidStateAbbreviation(state)) {
-    console.log(`State: ${state} is invalid`);
-    res.statusCode = 400;
-    res.json({
+    res.status(400).json({
       message: `${state} is not a valid 2 Letter Abbreviation for State`,
     });
     return;
   }
 
   const { data, error } = await supabase
-    .from('customer')
+    .from('opportunities')
     .insert({
       customer_first_name: firstName,
       customer_last_name: lastName,
@@ -66,14 +60,13 @@ app.post('/customer', async (req, res) => {
     .select();
 
   if (error) {
-    console.log(`Error: ${error}`);
-    res.statusCode = 500;
-    res.send(error);
+    console.log(`Insert Error: ${error.message}`);
+    res.status(500).send(error);
   } else {
     res.json(data);
   }
 });
 
 app.listen(port, () => {
-  console.log(`App is available on port: ${port}`);
+  console.log(`App is running on port: ${port}`);
 });
